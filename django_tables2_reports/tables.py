@@ -110,7 +110,11 @@ class TableReport(tables.Table):
                 if isinstance(cell, string):
                     # if cell is not a string strip_tags(cell) get an
                     # error in django 1.6
-                    cell = strip_tags(cell)
+                    try:
+                       cell = strip_tags(cell)
+                    except UnicodeDecodeError:
+                        #  decode the cell before strip tags
+                        cell = strip_tags(cell.decode('utf-8'))
                 else:
                     cell = unicode(cell)
                 csv_row.append(cell)
